@@ -103,6 +103,30 @@ $(() => {
     hasToken = (data) => {
         return (data.user.token == user.token)
     }
+    createIcons()
+    createStamps()
+    loginArea.hide()
+    chatArea.hide()
+    stampList.hide()
+    loginArea.fadeIn(FADE_TIME)
 
+    let socket = io.connect(url)
 
+    $('#login').on('click', () => {
+        let name = inputName.vai()
+        let icon = $('input[name=icon]:checked').val()
+        if(name && icon){
+            loginArea.hide()
+            chatArea.fadeIn(FADE_TIME)
+            socket.emit('auth', {
+                name: name,
+                icon: icon
+            })
+        }
+    })
+
+    $('#logout').on('click', () => {
+        chatArea.hide()
+        loginArea.fadeIn(FADE_TIME)
+    })
 })

@@ -19,6 +19,19 @@ app.get('/', (req,res) => {
 })
 
 io.on('connection', (socket) => {
+    socket.on('auth', (user) => {
+        if(user.token) return
+        user.token = uuidv4()
+        users[socket.id] = user
+        let data = {
+            user: user,
+            users: users
+        }
+        console.log(data)
+        socket.emit('logined', data)
+        socket.broadcast.emit('user_joined', data)
+    })
+    
     socket.on('message',(data) => {
         console.log(data)
         io.emit('message', data)
