@@ -185,4 +185,22 @@ $(() => {
     socket.on('load_stamp', (data) => {
         createChatImage(data, { width: STAMP_WIDTH })
     })
+
+    $('.uploadImage').on('change', (event) => {
+        let file = event.target.files[0]
+        let fileRender = new fileRender()
+        fileRender.readAsDataURL(file)
+        fileRender.onloaded = () => {
+            const data = {
+                image: fileRender.result,
+                user: user,
+            }
+            socket.emit('upload_image', data)
+            $('.uploadImage').val() = ''
+        }
+    })
+
+    socket.on('load_image', (data) => {
+        createChatImage(data, {width: IMAGE_WIDTH})
+    })
 })

@@ -46,6 +46,12 @@ io.on('connection', (socket) => {
         io.emit('load_stamp', data)
     })
 
+    socket.on('upload_image', (data) => {
+        data.dateTime = Date.now()
+        console.log(data)
+        io.emit('load_image', data)
+    })
+
     const logout = (socket) => {
         const user = users[socket.id]
         delete users[socket.io]
