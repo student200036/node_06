@@ -129,6 +129,9 @@ $(() => {
     $('#logout').on('click', () => {
         chatArea.hide()
         loginArea.fadeIn(FADE_TIME)
+
+        chatArea.hide()
+        loginArea.fadeIn(FADE_TIME)
     })
 
     $('#send').on('click', () => {
