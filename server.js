@@ -39,6 +39,12 @@ io.on('connection', (socket) => {
         data.datetime = Date.now()
         io.emit('message', data)
     })
+    
+    socket.on('upload_stamp', (data) => {
+        data.datetime = Date.now()
+        console.log(data)
+        io.emit('load_stamp', data)
+    })
 
     const logout = (socket) => {
         const user = users[socket.id]
@@ -50,6 +56,9 @@ io.on('connection', (socket) => {
     }
 
     socket.on('logout', () => {
+        logout(socket)
+    })
+    socket.on('disconnect', () => {
         logout(socket)
     })
 })

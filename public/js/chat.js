@@ -158,4 +158,31 @@ $(() => {
         addMessage(message)
         updateUserList()
     })
+
+     $('.stamp').on('click', () => {
+        stampList.toggle()
+    })
+
+    $('.uploadStamp').on('click', (event) => {
+        const image = new Image()
+        image.src = $(event.target).attr('src')
+        const mime_type = 'image/png'
+
+        image.onload = (e) => {
+            const canvas = document.createElement('canvas')
+            canvas.width = image.naturalWidth
+            canvas.height = image.naturalHeight
+            const ctx = canvas.getContext('2d')
+
+            ctx.drawImage(image, 0, 0)
+
+            const base64 = canvas.toDataURL(mime_type)
+            const data = { user: user, image: base64}
+
+            socket.emit('upload_stamp', data)
+        }
+    })
+    socket.on('load_stamp', (data) => {
+        createChatImage(data, { width: STAMP_WIDTH })
+    })
 })
