@@ -34,6 +34,7 @@ io.on('connection', (socket) => {
     
     socket.on('message',(data) => {
         console.log(data)
+        data.datetime = Date.now()
         io.emit('message', data)
     })
 })

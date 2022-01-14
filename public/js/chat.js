@@ -103,6 +103,7 @@ $(() => {
     hasToken = (data) => {
         return (data.user.token == user.token)
     }
+
     createIcons()
     createStamps()
     loginArea.hide()
@@ -113,14 +114,14 @@ $(() => {
     let socket = io.connect(url)
 
     $('#login').on('click', () => {
-        let name = inputName.vai()
+        let name = inputName.val()
         let icon = $('input[name=icon]:checked').val()
-        if(name && icon){
+        if (name && icon) {
             loginArea.hide()
             chatArea.fadeIn(FADE_TIME)
             socket.emit('auth', {
                 name: name,
-                icon: icon
+                icon: icon,
             })
         }
     })
@@ -128,5 +129,30 @@ $(() => {
     $('#logout').on('click', () => {
         chatArea.hide()
         loginArea.fadeIn(FADE_TIME)
+    })
+
+    $('#send').on('click', () => {
+        socket.emit('message', {
+            message: message.val(),
+            user: user,
+        })
+        message.val() = ''
+    })
+
+    socket.on('message', (data) => {
+        createChatMessage(data)
+    })
+
+    socket.on('logined', (data) => {
+        user = data.user
+        users = data.users
+        userName.text(user.name)
+        updateUserList()
+    })
+    socket.on('user_joined', (data) => {
+        users = data.users
+        let message = data.user.name + 'が入室しました'
+        addMessage(message)
+        updateUserList()
     })
 })
